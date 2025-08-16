@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api", // adjust if your backend is deployed
+  baseURL: "https://translator-ocet.onrender.com/api", // use your Render backend
 });
 
 // Fetch available languages
