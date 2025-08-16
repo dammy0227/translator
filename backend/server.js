@@ -1,16 +1,20 @@
-import express from "express";
-import cors from "cors";
+import "dotenv/config";
+import app from "./app.js";
+import { connectDB } from "./config/db.js";
 
-const app = express();
+const PORT = process.env.PORT || 5000;
+const MONGO_URI = process.env.MONGO_URI;
 
-app.use(cors({
-  origin: [
-    "https://translator-beige-mu.vercel.app", // your frontend on Vercel
-    "http://localhost:5173"                   // allow local dev
-  ],
-  methods: ["GET", "POST"],
-}));
+(async () => {
+  try {
+    await connectDB(MONGO_URI);
 
-app.use(express.json());
-
-export default app;
+    // ✅ Important: bind to 0.0.0.0 for Render
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`🚀 Server listening on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error("❌ Failed to start server:", err.message);
+    process.exit(1);
+  }
+})();
