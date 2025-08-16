@@ -7,14 +7,23 @@ import translateRoute from "./routes/translate.js";
 
 const app = express();
 
-app.use(cors({ origin: true, credentials: true }));
+// ✅ Allow both local dev & deployed frontend
+app.use(cors({
+  origin: [
+    "https://translator-beige-mu.vercel.app", // Vercel frontend
+    "http://localhost:5173"                   // Local dev
+  ],
+  methods: ["GET", "POST"],
+  credentials: true,
+}));
+
 app.use(express.json({ limit: "1mb" }));
 app.use(morgan("dev"));
 
 // Health check
 app.get("/health", (_req, res) => res.json({ status: "ok" }));
 
-// API
+// API routes
 app.use("/api/languages", languagesRoute);
 app.use("/api/translate", translateRoute);
 
