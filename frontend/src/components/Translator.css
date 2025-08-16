@@ -1,0 +1,137 @@
+/* Translator.css */
+
+/* General page styling */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f8f9fa;
+}
+
+/* Center the entire translator container */
+.translator-container,
+.language-selector,
+.translator-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem auto;
+  width: 100%;
+  max-width: 600px;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* Heading */
+h1 {
+  text-align: center;
+  margin: 1.5rem 0;
+  color: #333;
+}
+
+/* Language selector styling */
+.language-selector {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.language-selector label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: #444;
+}
+
+.language-selector select {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+/* Textarea styling */
+.translator-textarea {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: none;
+  outline: none;
+  margin-bottom: 1rem;
+  transition: border 0.2s ease;
+}
+
+.translator-textarea:focus {
+  border: 1px solid #007bff;
+}
+
+/* Button styling */
+.translator-button {
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.translator-button:hover {
+  background-color: #0056b3;
+}
+
+/* Result styling */
+.translator-result {
+  text-align: center;
+  background: #fff;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  width: 100%;
+}
+
+.translator-result h3 {
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+/* -------------------
+   Responsive Design
+-------------------- */
+@media (max-width: 768px) {
+  .translator-container,
+  .language-selector,
+  .translator-result {
+    max-width: 95%;
+    padding: 0.8rem;
+  }
+
+  .translator-textarea {
+    font-size: 0.95rem;
+  }
+
+  .translator-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .translator-textarea {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+
+  .translator-button {
+    font-size: 0.9rem;
+    padding: 0.7rem;
+  }
+}
