@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FiCopy } from "react-icons/fi"; // Copy icon
+import { Copy, ClipboardPaste } from "lucide-react"; 
 import './Translator.css';
 
 const TranslationForm = ({ onSubmit }) => {
@@ -11,38 +11,44 @@ const TranslationForm = ({ onSubmit }) => {
     if (text.trim()) onSubmit(text);
   };
 
-  const handleCopy = () => {
-    if (text.trim()) {
-      navigator.clipboard.writeText(text);
-      setCopied(true);
+  const handleCopy = async () => {
+    if (!text.trim()) return;
+    await navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
-      // Reset copied state after 2s
-      setTimeout(() => setCopied(false), 2000);
+  const handlePaste = async () => {
+    try {
+      const pasteText = await navigator.clipboard.readText();
+      setText((prev) => prev + (prev ? " " : "") + pasteText);
+    } catch (err) {
+      console.error("❌ Failed to paste:", err);
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="translator-container">
       <div className="textarea-wrapper">
-        <textarea 
+        <textarea
           className="translator-textarea"
           rows="4"
           placeholder="Enter text to translate..."
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
-        <button
-          type="button"
-          className="copy-btn"
-          onClick={handleCopy}
-          title="Copy text"
-        >
-          <FiCopy />
-        </button>
+        <div className="textarea-actions">
+          <button type="button" onClick={handleCopy} title="Copy input text">
+            <Copy size={18} />
+          </button>
+          <button type="button" onClick={handlePaste} title="Paste from clipboard">
+            <ClipboardPaste size={18} />
+          </button>
+        </div>
       </div>
       <br />
       <button type="submit" className="translator-button">Translate</button>
-      {copied && <span className="copied-message">Copied!</span>}
+      {copied && <span className="copied-message">✅ Copied!</span>}
     </form>
   );
 };

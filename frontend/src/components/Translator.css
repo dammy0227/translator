@@ -169,3 +169,28 @@ h1 {
   color: green;
   margin-left: 10px;
 }
+
+
+.textarea-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.textarea-actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 8px;
+}
+
+.textarea-actions button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #0077ff;
+}
+
+.textarea-actions button:hover {
+  color: #0056b3;
+}

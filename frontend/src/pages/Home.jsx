@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { fetchLanguages, translateText } from "../services/api";
 import LanguageSelector from "../components/LanguageSelector";
 import TranslationForm from "../components/TranslationForm";
-import { Copy } from "lucide-react"; // copy icon
+import { Copy } from "lucide-react"; 
 import "../components/Translator.css";
 
 const Home = () => {
