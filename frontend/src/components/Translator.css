@@ -135,3 +135,37 @@ h1 {
     padding: 0.7rem;
   }
 }
+
+
+
+.textarea-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.translator-textarea {
+  width: 100%;
+  padding-right: 40px; /* space for copy button */
+  resize: none;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #333;
+}
+
+.copy-btn:hover {
+  color: #007bff;
+}
+
+.copied-message {
+  font-size: 14px;
+  color: green;
+  margin-left: 10px;
+}
