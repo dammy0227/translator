@@ -2,7 +2,7 @@ import { translate } from "google-translate-api-x";
 import Translation from "../models/Translation.js";
 
 /**
- * 🧠 Smart name protector — handles multi-word names safely
+ * 🧠 Smart name protector — handles proper nouns safely
  */
 function protectNames(text) {
   const protectedNames = new Set();
@@ -30,12 +30,11 @@ function protectNames(text) {
     if (found) found.forEach((f) => protectedNames.add(f));
   });
 
-  // Replace with ultra-safe placeholders
+  // Replace with super-safe placeholders (no alphabetic characters)
   let protectedText = text;
   const nameList = Array.from(protectedNames);
   nameList.forEach((name, index) => {
-    // Use 🔒 to mark non-translatable placeholders
-    const placeholder = `[[🔒NAME_${index}🔒]]`;
+    const placeholder = `«${index}»`; // <<— safer placeholder
     protectedText = protectedText.replace(new RegExp(name, "gi"), placeholder);
   });
 
@@ -48,7 +47,7 @@ function protectNames(text) {
 function restoreNames(translatedText, nameList) {
   let restored = translatedText;
   nameList.forEach((name, index) => {
-    const placeholder = new RegExp(`\\[\\[🔒NAME_${index}🔒\\]\\]`, "g");
+    const placeholder = new RegExp(`«${index}»`, "g");
     restored = restored.replace(placeholder, name);
   });
   return restored;
@@ -68,13 +67,13 @@ export const translateText = async (req, res) => {
     // Step 1: Protect names before translation
     const { protectedText, nameList } = protectNames(text);
 
-    // Step 2: Perform translation
+    // Step 2: Translate
     const result = await translate(protectedText, {
       from: sourceLanguage,
       to: targetLanguage,
     });
 
-    // Step 3: Restore names
+    // Step 3: Restore protected names
     const translatedText = restoreNames(result.text, nameList);
 
     // Step 4: Save to DB (optional)
@@ -90,7 +89,7 @@ export const translateText = async (req, res) => {
       console.warn("⚠️ Failed to save translation:", e.message);
     }
 
-    // Step 5: Return response
+    // Step 5: Return
     return res.json({
       translatedText,
       detectedSourceLanguage: result.from.language.iso,
