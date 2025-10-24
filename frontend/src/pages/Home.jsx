@@ -79,7 +79,7 @@ const Home = () => {
           }}
         >
           <p>
-            <strong>Detected Source:</strong>{" "}
+            <strong>Translated Source:</strong>{" "}
             {result.detectedSourceLanguage || "Unknown"}
           </p>
 
