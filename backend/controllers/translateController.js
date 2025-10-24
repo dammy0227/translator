@@ -9,20 +9,21 @@ export const translateText = async (req, res) => {
       return res.status(400).json({ error: "text and targetLanguage are required" });
     }
 
-    // ✳️ Step 1: Identify known proper nouns to protect
+    // ✳️ Step 1: Identify proper nouns or names to protect
     const protectedNames = [
       "Moshood Abiola Polytechnic",
       "Moshood",
       "Abiola",
       "Nigeria",
       "Yoruba",
-      'Mapoly'
+      "Mapoly"
     ];
 
-    // ✳️ Step 2: Replace them with placeholder tags before translation
+    // ✳️ Step 2: Replace names with unique placeholders before translation
     protectedNames.forEach((name, index) => {
-      const placeholder = `__NAME_${index}__`;
-      text = text.replace(new RegExp(name, "gi"), placeholder);
+      const placeholder = `@@NAME_${index}@@`; // ✅ safer placeholder
+      const regex = new RegExp(name, "gi");
+      text = text.replace(regex, placeholder);
     });
 
     // ✳️ Step 3: Perform translation
@@ -33,10 +34,11 @@ export const translateText = async (req, res) => {
 
     let translatedText = result.text;
 
-    // ✳️ Step 4: Restore original names
+    // ✳️ Step 4: Restore original names after translation
     protectedNames.forEach((name, index) => {
-      const placeholder = `__NAME_${index}__`;
-      translatedText = translatedText.replace(new RegExp(placeholder, "g"), name);
+      const placeholder = `@@NAME_${index}@@`;
+      const regex = new RegExp(placeholder, "g");
+      translatedText = translatedText.replace(regex, name);
     });
 
     // Save to database (optional)
