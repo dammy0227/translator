@@ -1,35 +1,52 @@
-import { translate } from "google-translate-api-x";
+import fetch from "node-fetch";
 import Translation from "../models/Translation.js";
 
+/**
+ * 🌍 LibreTranslate-based Translator
+ */
 export const translateText = async (req, res) => {
   try {
-    const { text, targetLanguage, sourceLanguage = "auto", userId = null } = req.body;
+    let { text, targetLanguage, sourceLanguage = "auto", userId = null } = req.body;
 
     if (!text || !targetLanguage) {
       return res.status(400).json({ error: "text and targetLanguage are required" });
     }
 
-    const result = await translate(text, {
-      from: sourceLanguage,
-      to: targetLanguage
+    // 🧠 Step 1: Call LibreTranslate API
+    const response = await fetch("https://libretranslate.com/translate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        q: text,
+        source: sourceLanguage === "auto" ? "en" : sourceLanguage,
+        target: targetLanguage,
+        format: "text",
+      }),
     });
 
-    // Save to DB (non-blocking)
+    const data = await response.json();
+
+    if (!data.translatedText) {
+      throw new Error("Translation failed or invalid response from LibreTranslate");
+    }
+
+    // 💾 Step 2: Save to MongoDB (optional)
     try {
       await Translation.create({
         userId,
         original: text,
-        translated: result.text,
-        sourceLanguage: result.from.language.iso,
-        targetLanguage
+        translated: data.translatedText,
+        sourceLanguage,
+        targetLanguage,
       });
     } catch (e) {
       console.warn("⚠️ Failed to save translation:", e.message);
     }
 
+    // 📤 Step 3: Send translation result
     return res.json({
-      translatedText: result.text,
-      detectedSourceLanguage: result.from.language.iso
+      translatedText: data.translatedText,
+      detectedSourceLanguage: sourceLanguage,
     });
   } catch (err) {
     console.error("❌ Translation error:", err.message);
