@@ -1,20 +1,16 @@
-import fetch from "node-fetch";
+import { translate } from "google-translate-api-x";
 
 export const getLanguages = async (_req, res) => {
   try {
-    const response = await fetch("https://libretranslate.com/languages");
-    const data = await response.json();
+    const langs = translate.languages;
 
-    // Convert into standard format for frontend
-    const langs = data.map((lang) => ({
-      code: lang.code,
-      name: lang.name,
+    // Convert { en: 'English', fr: 'French' } → [{ code: "en", name: "English" }, ...]
+    const data = Object.entries(langs).map(([code, name]) => ({
+      code,
+      name
     }));
 
-    // Add "auto" detection option manually
-    langs.unshift({ code: "auto", name: "Auto Detect" });
-
-    return res.json(langs);
+    return res.json(data);
   } catch (err) {
     console.error("❌ Language fetch error:", err.message);
     return res.status(500).json({ error: "Failed to load languages" });
